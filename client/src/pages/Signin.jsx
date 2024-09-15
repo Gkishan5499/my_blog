@@ -6,8 +6,8 @@ import { signInFailure, signInStart, signInSuccess } from '../redux/user/userSli
 
 const Signin = () => {
   const [formData, SetFormData] = useState({});
-  const {loading ,error:errorMessage} = useSelector(state=>state.user);
-  const navigate= useNavigate();
+  const { loading, error: errorMessage } = useSelector(state => state.user);
+  const navigate = useNavigate();
   const dispatch = useDispatch()
 
   const handleChange = (e) => {
@@ -28,11 +28,11 @@ const Signin = () => {
 
       });
       const data = await res.json();
-      if(data.success===false){
+      if (data.success === false) {
         dispatch(signInFailure(data.message));
       }
-      
-      if(res.ok){
+
+      if (res.ok) {
         dispatch(signInSuccess(data));
         return navigate('/');
       }
@@ -57,7 +57,7 @@ const Signin = () => {
         </div>
         {/* right */}
         <div className='flex-1'>
-          <form className='flex flex-col gap-5'  onSubmit={handleSubmit}>
+          <form className='flex flex-col gap-5' onSubmit={handleSubmit}>
 
             <div>
               <Label value='Your Email' />
@@ -71,10 +71,10 @@ const Signin = () => {
             </div>
 
             <Button gradientDuoTone='purpleToPink' type='submit' disabled={loading}>
-             {
-              loading? <><Spinner/><span className='pl-3'>Loading..</span></>:'Sign-In'
-             }
-              
+              {
+                loading ? <><Spinner /><span className='pl-3'>Loading..</span></> : 'Sign-In'
+              }
+
             </Button>
 
           </form>
@@ -83,12 +83,12 @@ const Signin = () => {
             <p className='text-sm mt-5'>
               <span>Don't have an account? </span><Link to='/sign-up' className='text-blue-600'>Sign-up</Link></p>
           </div>
-        
-           <div>
+
+          <div>
             {
               errorMessage && (<Alert className='mt-5' color='failure'>{errorMessage}</Alert>)
             }
-           </div>
+          </div>
         </div>
 
 
