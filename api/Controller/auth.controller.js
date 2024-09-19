@@ -4,7 +4,7 @@ import { errorHandler } from '../utils/error.handler.js';
 // import pkg from 'jsonwebtoken'
 // import {jwt , }
 import  jwt from 'jsonwebtoken'
-// const {jwt}=pkg;
+// const {jwt}=pkg
  
 export const signup = async (req, res, next) => {
     const { username, email, password } = req.body;
@@ -57,12 +57,56 @@ export const signin = async (req, res, next) => {
             process.env.JWT_KEY,
         );
         const{password:pass, ...rest}=validUser._doc;
-        res.status(200).cookie('access token',token,{
+        res.status(200).cookie('access_token',token,{
             httpOnly:true,    
         }).json(rest);
     }
     catch (error) {
         next(error);
+    }
+
+}
+
+export const google = async(req, res, next)=>{
+    const {email, name, photo}= req.body;
+
+    try {
+        const user  = await User.findOne({email});
+          if(user){
+             const token =  jwt.sign({id:user._id}, process.env.JWT_KEY);
+             const{password:pass, ...rest}=user._doc;
+             res.status(200).cookie('access_token ',token,{
+                httpOnly : true,
+                
+             }).json(rest);
+          }
+          else{
+            const generatePassword =  Math.random().toString(36).slice(-8)+ Math.random().toString(36)
+            .slice(-8);
+            const hashedPassword =  bcryptjs.hashSync(generatePassword, 10);
+            const newUser = new User({
+                username: name.toLowerCase().split(' ').join(' ')+Math.random().toString(9).slice(-4),
+                email,
+                password: hashedPassword,
+                profilePicter:photo
+
+            });
+        
+
+        await newUser.save();
+        const token =   jwt.sign({id:newUser._id}, process.env.JWT_KEY);
+        const{password:pass, ...rest}= newUser._doc;
+        res.status(200).cookie('access_token',token, {
+        httpOnly:true,
+
+        }).json(rest);
+
+    }
+
+         
+
+    } catch (error) {
+        next(error); 
     }
 
 }
