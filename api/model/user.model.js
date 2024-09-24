@@ -17,6 +17,11 @@ const userSchema= new mongoose.Schema(
         require:true,
         
      },
+
+     profilePicter:{
+      type:String,
+      
+     }
      
     },
     {timestamps:true}
