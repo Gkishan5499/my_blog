@@ -2,13 +2,24 @@ import React from 'react'
 import {Avatar, Button, Dropdown, DropdownDivider, DropdownHeader, DropdownItem, Navbar, TextInput} from 'flowbite-react'
 import {Link, useLocation} from 'react-router-dom'
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon } from "react-icons/fa";
-import {useSelector} from 'react-redux'
+
+import { FaMoon, FaSun } from "react-icons/fa";
+import {useDispatch, useSelector} from 'react-redux'
+import { toggleTheme } from '../redux/theme/themeSlice.js';
+
 
  
 const Header = () => {
-    const {currentUser} = useSelector(state => state.user);
-    const path = useLocation().pathname
+    const {currentUser} = useSelector((state) => state.user);
+    const path = useLocation().pathname;
+
+    const {theme}= useSelector((state)=>state.theme);
+    const dispatch = useDispatch();
+
+    const logout =()=>{
+        localStorage.clear();
+        window.location.href='/sign-in'
+    }
   return (
      
         <Navbar className='border-b-2'>
@@ -28,7 +39,9 @@ const Header = () => {
             <Button className='w-12 h-10 lg:hidden' color='gray' pill><AiOutlineSearch/></Button>
 
              <div className='flex gap-2 md:order-2'>
-                <Button className='w-12 h-10 sm:inline' color='gray' pill><FaMoon/></Button>
+                <Button className='w-12 h-10 sm:inline' color='gray' pill onClick={()=>dispatch(toggleTheme())}>
+                {theme === 'light'? <FaSun/>:<FaMoon/>}
+                </Button>
 
                   {
                     currentUser? (
@@ -58,7 +71,7 @@ const Header = () => {
 
                           <DropdownDivider/>
 
-                          <DropdownItem>Sign out</DropdownItem>
+                          <DropdownItem onClick={logout}>Sign out</DropdownItem>
 
                     </Dropdown>
                         
