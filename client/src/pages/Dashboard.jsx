@@ -9,13 +9,15 @@ const Dashboard = () => {
   const [tab, setTab]=useState('');
 
   useEffect(()=>{
-    const urlParam= new URLSearchParams(location.search);
-    const tabParam= urlParam.get('tab');
+    const urlParam = new URLSearchParams(location.search);
+    const tabParam = urlParam.get('tab');
+
      if(tabParam){
-      setTab(tabParam);
+        setTab(tabParam);
      }
 
   },[location.search]);
+  
   return (
 
     <div className='min-h-screen flex flex-col md:flex-row'>
