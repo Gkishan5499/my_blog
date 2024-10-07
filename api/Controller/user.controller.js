@@ -21,7 +21,7 @@ export const updateUser = async(req, res , next)=>{
 
     }
 
-    if(req.body.username){
+   if(req.body.username){
         if(req.body.username.length < 7 || req.body.username.length > 20){
             return next(errorHandler( 400, "Username must be between 7 and 20 characters"));
         }
@@ -36,13 +36,13 @@ export const updateUser = async(req, res , next)=>{
            if(!req.body.username.match(/^[a-z0-9]+$/i)){
             return next(errorHandler(400,"Username can only contain letters and numbers"));
            }
-
+    };
            try {
              const updateUser= await User.findByIdAndUpdate(req.params.userId, {
                 $set:{
                     username: req.body.username,
                     email: req.body.email,
-                    profilePicter: req.body.profilePicter,
+                    profilePictures: req.body.profilePictures,
                     password: req.body.password
                 }
 
@@ -52,5 +52,4 @@ export const updateUser = async(req, res , next)=>{
            } catch (error) {
                  next(error);
            };
-    };
 };
