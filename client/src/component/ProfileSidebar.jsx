@@ -5,7 +5,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../firebase'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { deleteUserFailure, deleteUserStart, deleteUserSuccess, updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice';
+import { deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutSuccess, updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice';
 import { set } from 'mongoose';
 import { TbAlertSquare } from "react-icons/tb";
 
@@ -137,7 +137,27 @@ const ProfileSidebar = () => {
 
             }
         } catch (error) {
-              dispatch(deleteUserFailure(error.message));
+            dispatch(deleteUserFailure(error.message));
+        }
+    }
+
+    const logOut = async () => {
+        try {
+            const res = await fetch('/api/user/signOut', {
+                method: 'POST',
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                console.log(data.message);
+
+            }
+            else {
+                dispatch(signOutSuccess(data));
+            }
+
+        } catch (error) {
+            console.log(error);
         }
     }
     return (
@@ -209,7 +229,7 @@ const ProfileSidebar = () => {
             </form>
             <div className='text-red-500 flex justify-between mt-3'>
                 <span onClick={() => setShowModel(true)} className='cursor-pointer'>Delete Account</span>
-                <span className='cursor-pointer'>Logout</span>
+                <span onClick={logOut} className='cursor-pointer'>Logout</span>
 
             </div>
             {
