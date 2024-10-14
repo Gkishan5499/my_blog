@@ -8,10 +8,11 @@ import 'react-circular-progressbar/dist/styles.css';
 import { deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutSuccess, updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice';
 import { set } from 'mongoose';
 import { TbAlertSquare } from "react-icons/tb";
+import { Link } from 'react-router-dom';
 
 
 const ProfileSidebar = () => {
-    const { currentUser, error } = useSelector((state) => state.user);
+    const { currentUser, error, loading } = useSelector((state) => state.user);
     const [imageFile, setImageFile] = useState(null);
     const [imageUrl, setImageUrl] = useState(null);
     const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -120,7 +121,6 @@ const ProfileSidebar = () => {
 
     const handleDeleteUser = async (e) => {
         setShowModel(false);
-
         try {
             dispatch(deleteUserStart());
             const res = await fetch(`/api/user/delete/${currentUser._id}`, {
@@ -224,7 +224,25 @@ const ProfileSidebar = () => {
                     placeholder='Password'
                     onChange={handleChange}
                 />
-                <Button type='submit' gradientDuoTone='purpleToBlue' outline>Update</Button>
+                
+                <Button type='submit' gradientDuoTone='purpleToBlue'
+                 outline
+                 disabled={loading || imageFileUploading}>
+                    {loading ? 'Loading..':'Update'}
+                </Button>
+
+                {
+                 currentUser.isAdmin &&
+                    <Link to='/create-post'>
+                       <Button type='submit'
+                        gradientDuoTone='purpleToPink'
+                        outline
+                        className='w-full'
+                    >
+                        {loading ? 'Loading..':'Create New Post'}
+                        </Button>
+                    </Link>
+                }
 
             </form>
             <div className='text-red-500 flex justify-between mt-3'>
