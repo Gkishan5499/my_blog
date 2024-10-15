@@ -6,12 +6,16 @@ import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/st
 import { app } from '../firebase'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import { useNavigate } from 'react-router-dom';
 
 const CreatePost = () => {
    const [file, setFile]= useState(null);
    const [imageProgress, setImageProgress]= useState(null);
    const[ imageUploadError,  setImageUploadError]= useState(null);
    const [formData, setFormData]= useState({})
+   const [ publishError, setPublishError] = useState(null);
+   const navigate= useNavigate();
+  
 
    const handleImageUpload = async()=>{
     try {
@@ -55,24 +59,61 @@ const CreatePost = () => {
       
     }
    }
+     
+   const handleSubmit = async(e)=>{
+    e.preventDefault();
+
+    try {
+       const res =  await fetch('/api/post/create', {
+        method:'POST',
+        headers:{
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify(formData),
+
+       });
+              
+       const data = await res.json();
+       console.log(data);
+       if(data.success===false){
+         return setPublishError(data.message);
+        
+       }
+       if(res.ok){
+        setPublishError(null);
+        navigate(`/post/${data.slug}`)
+      
+       }
+       
+    } catch (error) {
+       setPublishError("Somthing went wrong");
+    }
+   };
+
+
+
 
   return (
     <div className='p-3 max-w-3xl mx-auto'>
     <h1 className='text-center text-3xl font-medium my-6 '>Create a Post</h1> 
-    <form className='flex flex-col justify-between'>
+    <form className='flex flex-col justify-between' onSubmit={handleSubmit}>
          <div className='flex flex-col gap-4 sm:flex-row'>
+
            <TextInput
            type='text'
+           id='title'
+           required
            placeholder='Title'
            className='flex-1'
+           onChange={(e)=>setFormData({...formData, title:e.target.value})}
            />
 
-           <Select>
+           <Select
+            onChange={(e)=>setFormData({...formData, category:e.target.value})}
+           >
             <option value="uncategorized">Select a Category</option>
-            <option value="React Js">React Js</option>
-            <option value="JavaScript">JavaScript</option>
-
-
+            <option value="reactJs">React Js</option>
+            <option value="javaScript">JavaScript</option>
            </Select>
          </div>
          <div className='flex gap-4 border-teal-300 border-4 border-dotted p-4 justify-between my-4'>
@@ -107,9 +148,23 @@ const CreatePost = () => {
               />
             )
           }
-          <ReactQuill theme="snow" placeholder="Write Something" className='h-72 mb-16'/>
-          <Button type='submit'  gradientDuoTone='purpleToPink'>Publish</Button>
+          <ReactQuill
+            theme="snow" 
+            placeholder="Write Something" 
+            className='h-72 mb-16'
+            required
+            onChange={(value)=>{
+            setFormData({...formData, content:value})
+            }
+            }
+           />
+
+          <Button type='submit' gradientDuoTone='purpleToPink'>Publish</Button>
+          {
+          publishError && <Alert color='failure' className='mt-5'>{publishError}</Alert>
+          }
     </form>
+    
     </div>
   )
 }

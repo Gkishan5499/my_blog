@@ -9,7 +9,7 @@ export const create = async (req, res, next) => {
     if (!req.body.title || !req.body.content) {
         return next(errorHandler(400, "Please fill in all fields"));
     }
-    const slug = req.body.title.split(' ').join('_').toLowerCase().replace(/[^a-z0-9-]/g, ' ');
+    const slug = req.body.title.split(' ').join('_').toLowerCase().replace(/[^a-z0-9-]/g, '-');
     const newPost = new Post({
         ...req.body,
         slug,
