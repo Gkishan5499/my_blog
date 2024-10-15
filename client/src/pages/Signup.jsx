@@ -22,7 +22,7 @@ const Signup = () => {
       setLoading(true);
       setErrorMessage(null);
       const res = await fetch('/api/auth/signup', {
-        method: 'POST',
+        method: 'POST', 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
 
@@ -57,7 +57,7 @@ const Signup = () => {
         </div>
         {/* right */}
         <div className='flex-1'>
-          <form className='flex flex-col gap-5'  onSubmit={handleSubmit}>
+          <form className='flex flex-col gap-5' onSubmit={handleSubmit}>
             <div>
               <Label value='Your Username' />
               <TextInput type='text' placeholder='Username' id='username' onChange={handleChange} />
