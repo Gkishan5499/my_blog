@@ -11,7 +11,7 @@ const DashPosts = () => {
   const [showMore, setShowMore] = useState(true);
   const [showModel, setShowModel] = useState(false);
   const [postToIdDelete, setPostToIdDelete] = useState('');
-  console.log(userPost);
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
