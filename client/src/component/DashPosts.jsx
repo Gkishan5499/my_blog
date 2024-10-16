@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import {Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow} from 'flowbite-react'
+import {Button, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow} from 'flowbite-react'
 
 const DashPosts = () => {
   const {currentUser} = useSelector((state)=>state.user);
   const [userPost, setUserPost]= useState([]);
+  const [showMore, setShowMore] = useState(true);
   console.log(userPost);
     useEffect (()=>{
       const fetchPosts= async()=>{
@@ -15,6 +16,9 @@ const DashPosts = () => {
         const data = await res.json();
         if(res.ok){
              setUserPost(data.posts);
+             if(data.posts.id >5){
+              setShowMore(false);
+             }
         }
         }
         catch(error){
@@ -24,7 +28,28 @@ const DashPosts = () => {
       if(currentUser.isAdmin){
         fetchPosts();
       }
-    },[currentUser._id])
+    },[currentUser._id]);
+
+    const handleShowmore = async()=>{
+      const startIndex = userPost.length;
+
+      try {
+
+        const res =  await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`);
+        const data = await res.json();
+         if(res.ok){
+          setUserPost((prev)=>[...prev, ...data.posts]);
+           if(data.posts.length<8){
+            setShowMore(false);
+           }
+         }
+        
+      } catch (error) {
+        next(error);
+      }
+    }
+
+
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-4 scrollbar
      scrollbar-track-slate-50 scrollbar-thumb-slate-200 dark:scrollbar-track-slate-700
@@ -32,6 +57,7 @@ const DashPosts = () => {
         {
           currentUser.isAdmin && userPost.length > 0 ? 
           (
+            <>
             <Table hoverable className='shadow-md'>
                 <TableHead>
                       <TableHeadCell>Date Update</TableHeadCell>
@@ -88,6 +114,14 @@ const DashPosts = () => {
                   ))
               }  
             </Table>
+            {
+              showMore && (
+                 <button onClick={handleShowmore} className='w-full text-teal-500  self-center py-7'>
+                  Show More 
+                 </button>
+              )
+            }
+            </>
           ):
           (<p>You have no post</p>)
 
