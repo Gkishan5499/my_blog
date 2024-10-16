@@ -10,8 +10,8 @@ import { set } from 'mongoose';
 import { TbAlertSquare } from "react-icons/tb";
 import { Link } from 'react-router-dom';
 
-
-const ProfileSidebar = () => {
+const ProfileSidebar = 
+() => {
     const { currentUser, error, loading } = useSelector((state) => state.user);
     const [imageFile, setImageFile] = useState(null);
     const [imageUrl, setImageUrl] = useState(null);
