@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import DashSidebar from '../component/DashSidebar';
 import ProfileSidebar from '../component/ProfileSidebar';
 import DashPosts from  '../component/DashPosts';
+import DashUsers from '../component/DashUsers';
 
 
 const Dashboard = () => {
@@ -30,7 +31,11 @@ const Dashboard = () => {
        <div className='w-full'>
              {/* Profile Sidebar  */}
              {tab==='profile' && <ProfileSidebar/>}
+             {/* Dashboard Post */}
              {tab==='posts' && <DashPosts/>}
+
+             {/* Dashboard Users */}
+             {tab==='users' && <DashUsers/>}
        </div>
           
     </div>

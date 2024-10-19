@@ -20,12 +20,14 @@ const userSchema= new mongoose.Schema(
 
      profilePictures:{
       type:String,
+      default:"https://icons.veryicon.com/png/Business/Pretty%20Office/Man.png"
       
      },
      isAdmin:{
       type:Boolean,
       default:false,
      }
+     ,
      
     },
     {timestamps:true}
