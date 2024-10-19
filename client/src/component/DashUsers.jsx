@@ -57,7 +57,7 @@ const DashUsers = () => {
    const handleDeleteUser = async()=>{
      setShowModel(false);
      try{
-        const res = await fetch(`/api/user/delete/${userToIdDelete}/${currentUser._id}`,{
+        const res = await fetch(`/api/user/delete/${userToIdDelete}`,{
           method:'DELETE',
 
         },
