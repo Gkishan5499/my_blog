@@ -19,7 +19,7 @@ const DashPosts = () => {
         const data = await res.json();
         if (res.ok) {
           setUserPost(data.posts);
-          console.log(data.posts);
+          
           if (data.posts.id > 5) {
             setShowMore(false);
           }
@@ -98,7 +98,7 @@ const DashPosts = () => {
 
                 {
                   userPost.map((post) => (
-                    <TableBody>
+                    <TableBody className='divide-y' key={post._id}>
                       <TableRow className='bg-white dark:border-gray-700 dark:bg-gray-900'>
                         <TableCell>
                           {new Date(post.updatedAt).toLocaleDateString()}

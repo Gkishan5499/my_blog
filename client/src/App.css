@@ -1,0 +1,20 @@
+.post-content p{
+    margin-bottom: 0.5rem;
+    font-size: 18px;
+
+}
+.post-content h1{
+    font-size: 1.5rem;
+    margin: 10px 0 ;
+
+}
+
+.post-content h2{
+    font-size: 1.4rem;
+    margin: 15px 0 ;
+    
+}
+.post-content a{
+    color: rgb(38, 191, 243);
+    text-decoration: none;
+}

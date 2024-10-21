@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const postSchema =  new mongoose.Schema({
  
     userId :{
-        type:String,
+        type: String,
         required:true
     },
 
