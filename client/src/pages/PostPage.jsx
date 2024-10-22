@@ -1,8 +1,9 @@
-import { Button } from 'flowbite-react';
+import { Button, Spinner } from 'flowbite-react';
 import React, { useState } from 'react' 
 import { useEffect } from 'react';
 import {Link, useParams}  from 'react-router-dom'
 import CallToAction from '../component/CallToAction';
+import CommentSection from '../component/CommentSection';
 
 const PostPage = () => {
     const {postSlug}  = useParams();
@@ -39,7 +40,7 @@ const PostPage = () => {
     if(loading)
         return (
          <div className='flex justify-center items-center min-h-screen'>
-             <span>Loading..</span>
+             <Spinner color="info" size='lg' aria-label='Info spinner example'/>
         </div>
         );
     
@@ -65,6 +66,8 @@ const PostPage = () => {
       <div className='max-w-4xl mx-auto w-full p-3'>
        <CallToAction/>
       </div>
+      <CommentSection postId={post._id}/>
+
     </main>
   )
 }
