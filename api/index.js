@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import userRouter from './Routers/user.router.js'
 import authRouter from './Routers/auth.router.js'
 import postRouter from './Routers/post.router.js'
+import commentRouter from './Routers/comment.router.js'
 
 import cookieParser from 'cookie-parser';
 const app = express();
@@ -29,6 +30,8 @@ app.listen(PORT,()=>{
 app.use('/api/user',userRouter);
 app.use('/api/auth' ,authRouter );
 app.use('/api/post', postRouter);
+app.use('/api/comment', commentRouter);
+
 
 
 app.use((err, req, res, next)=>{
