@@ -91,6 +91,13 @@ const CommentSection = ({ postId }) => {
       console.log(error.message);
     }
   }
+const handleEdit = async(comment, editedContent)=>{
+         setComments(
+           comments.map((c)=>{
+             c._id === comment._id ? {...c , content:editedContent} : c ;
+           })
+         );
+       }
 
   return (
     <div className='max-w-4xl mx-auto w-full'>
@@ -153,11 +160,11 @@ const CommentSection = ({ postId }) => {
            <div className='py-1 px-2 border border-gray-300'>{comments.length}</div>
            </div>
             {
-              comments.map((comment )=>{
-                return(
-                   <Comment key={comment._id} comment={comment} onLike={handleLike}/> 
-                )  
-               })
+              comments.map((comment)=>(
+                
+                   <Comment key={comment._id} comment={comment} onLike={handleLike} onEdit={handleEdit}/> 
+                 
+              ))
 
             }
           
