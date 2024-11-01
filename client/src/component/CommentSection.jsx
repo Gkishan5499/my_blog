@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
-import { Alert, Button, Textarea } from 'flowbite-react';
+import { Alert, Button, Modal, ModalBody, ModalHeader, Textarea } from 'flowbite-react';
 import Comment from './Comment.jsx';
+import { TbAlertSquare } from 'react-icons/tb';
 
 const CommentSection = ({ postId }) => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState('');
   const [commentError, setCommentError] = useState(null);
+  const [showModel,setShowModel] = useState(false);
   const [comments, setComments] = useState([]);
-
-  console.log(comments);
+  const [commentToDelete , setCommentToDelete] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -94,10 +95,31 @@ const CommentSection = ({ postId }) => {
 const handleEdit = async(comment, editedContent)=>{
          setComments(
            comments.map((c)=>{
-             c._id === comment._id ? {...c , content:editedContent} : c ;
+             c._id === comment._id ? {...c , content: editedContent} : c 
            })
          );
        }
+
+const handleDeleteComment = async(commentId)=>{
+  setShowModel(false);
+  try {
+    if(!currentUser){
+          navigate('/sign-in');
+          return;
+    }
+    const res = await fetch(`/api/comment/deleteComment/${commentId}`,{
+      method:'DELETE'
+    });
+    if(res.ok){
+      const data = await res.json();
+      setComments(comments.filter((comment)=>comment._id !== commentId));
+    }
+    
+    
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
   return (
     <div className='max-w-4xl mx-auto w-full'>
@@ -162,7 +184,16 @@ const handleEdit = async(comment, editedContent)=>{
             {
               comments.map((comment)=>(
                 
-                   <Comment key={comment._id} comment={comment} onLike={handleLike} onEdit={handleEdit}/> 
+                   <Comment 
+                   key={comment._id} 
+                   comment={comment}
+                   onLike={handleLike}
+                   onEdit={handleEdit} 
+                   onDelete={(commentId)=>{
+                    setShowModel(true);
+                    setCommentToDelete(commentId);
+                   }}
+                   /> 
                  
               ))
 
@@ -171,6 +202,35 @@ const handleEdit = async(comment, editedContent)=>{
           </div>
           )
         }
+
+        <Modal
+        show={showModel}
+        onClose={() => setShowModel(false)}
+        popup
+        size='md'
+      >
+        <ModalHeader />
+        <ModalBody>
+          <div className="text-center">
+            <TbAlertSquare className='w-14 h-14 text-gray-400
+                     dark:text-gray-200 mb-5 mx-auto'/>
+            <p
+              className='text-lg text-center
+                         text-gray-500
+                         dark:text-gray-100 mb-5'>Are you sure you want to delete your comment</p>
+
+            <div className='flex justify-center gap-5'>
+              <Button color='failure' onClick={()=>handleDeleteComment(commentToDelete)}>
+                Yes, I'm Sure
+              </Button>
+
+              <Button color='gray' onClick={() => setShowModel(false)}>No, Cancel</Button>
+            </div>
+          </div>
+        </ModalBody>
+      </Modal>
+
+
 
     </div>
   )
