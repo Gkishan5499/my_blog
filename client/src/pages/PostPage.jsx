@@ -4,12 +4,14 @@ import { useEffect } from 'react';
 import {Link, useParams}  from 'react-router-dom'
 import CallToAction from '../component/CallToAction';
 import CommentSection from '../component/CommentSection';
+import Postcard from '../component/Postcard';
 
 const PostPage = () => {
     const {postSlug}  = useParams();
     const [post, setPost] = useState(null);
     const [error, setError]= useState(false);
     const [loading, setLoading] = useState(true);
+    const [recentPosts, setRecentPosts] = useState(null);
     console.log(post);
 
     useEffect(()=>{
@@ -36,6 +38,23 @@ const PostPage = () => {
          }
          fetchPost();
     },[postSlug]);
+
+
+    useEffect (()=>{
+      try {
+        const fetchData= async()=>{
+           
+          const res = await fetch('/api/post/getposts?limit=3');
+          const data = await res.json();
+          if(res.ok){
+             setRecentPosts(data.posts);
+          }
+        }
+        fetchData();
+      } catch (error) {
+        console.log(error.message)
+      }
+    },[]);
   
     if(loading)
         return (
@@ -45,7 +64,7 @@ const PostPage = () => {
         );
     
   return (
-    <main className=' max-w-6xl p-3 flex flex-col mx-auto min-h-screen '>
+    <main className=' max-w-6xl  p-3 flex flex-col mx-auto min-h-screen '>
      <h1 className='text-center text-3xl lg:text-4xl font-serif mt-10 p-4 max-w-2xl mx-auto '>{post && post.title}</h1>
      <Link to={`/search?category=${post && post.category}`} className='self-center mt-5'>
         <Button color='gray' pill size='xs' >{post && post.category}</Button>
@@ -67,6 +86,19 @@ const PostPage = () => {
        <CallToAction/>
       </div>
       <CommentSection postId={post._id}/>
+
+      <div className='flex flex-col justify-center items-center mt-3'>
+        <h1 className='text-2xl font-medium'>Recent Artical</h1>
+        <div className='flex flex-wrap justify-center mt-4 gap-5'>
+           {
+            recentPosts && recentPosts.map((post)=>(
+             <Postcard key={post._id} post={post}/>
+            )
+
+            )
+           }
+        </div>
+      </div>
 
     </main>
   )

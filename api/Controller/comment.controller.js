@@ -100,3 +100,33 @@ export const createComment = async(req, res ,next)=>{
     }
 
  } 
+
+ export const getcomments = async(req, res, next)=>{
+    if(!req.user.isAdmin) {
+         return next(errorHandler(403, 'You are not allowed to view all comments'))
+    }
+    try {
+        const startIndex = parseInt(req.query.startIndex) || 0;
+        const limit =  parseInt(req.query.limit) || 9 ;
+        const sortDirecttion =  req.query.sort === 'desc' ?  -1 : 1;
+        const comments = await PostComment.find()
+        .sort({createdAt:sortDirecttion})
+        .skip(startIndex)
+        .limit(limit);
+
+        const totalComments = await PostComment.countDocuments();
+        const now =  new Date();
+        const oneMonthAgo  = new Date(now.getFullYear(), now.getMonth()-1 , now.getDate());
+        const commentsInLastMonth = await PostComment.find({createdAt:{$gte:oneMonthAgo}});
+
+        res.status(200).json({
+            comments,
+            totalComments,
+            commentsInLastMonth,
+        });
+
+        
+    } catch (error) {
+        next(error);
+    }
+ }
