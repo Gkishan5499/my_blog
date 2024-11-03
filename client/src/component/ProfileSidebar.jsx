@@ -161,7 +161,7 @@ const ProfileSidebar =
         }
     }
     return (
-        <div className='max-w-lg mx-auto p-3 w-ful'>
+        <div className='max-w-lg mx-auto p-3 w-full'>
             <h1 className='my-6 text-3xl text-center font-semibold'>Profile</h1>
             <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                 <input type='file' accept='image/*' onChange={handleImageFile} ref={filePickerRef} className='hidden' />

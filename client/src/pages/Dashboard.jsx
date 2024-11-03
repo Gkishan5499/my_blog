@@ -5,6 +5,7 @@ import ProfileSidebar from '../component/ProfileSidebar';
 import DashPosts from  '../component/DashPosts';
 import DashUsers from '../component/DashUsers';
 import Dashcomments from '../component/Dashcomments';
+import DashboardComp from '../component/DashboardComp';
 
 
 const Dashboard = () => {
@@ -23,7 +24,7 @@ const Dashboard = () => {
   
   return (
 
-    <div className='min-h-screen flex flex-col md:flex-row'>
+    <div className='min-h-screen flex flex-col md:flex-row '>
        <div className='md:w-56'>
           {/* Dashboard Sidebar */}
           <DashSidebar/>
@@ -41,6 +42,9 @@ const Dashboard = () => {
              {/* Dashboard Comment  */}
 
              {tab==='comments' && <Dashcomments/>}
+
+             {/* Dashboard component */}
+             {tab ==='dash'&& <DashboardComp/>}
        </div>
           
     </div>
