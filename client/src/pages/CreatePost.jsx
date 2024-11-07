@@ -116,6 +116,8 @@ const CreatePost = () => {
             <option value="javaScript">JavaScript</option>
             <option value="fullstack">Full Stack</option>
             <option value="frontend">Frontend Development</option>
+            <option value="nextjs">Next Js</option>
+            <option value="wordpress">wordpress</option>
 
 
            </Select>
