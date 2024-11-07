@@ -5,6 +5,7 @@ import userRouter from './Routers/user.router.js'
 import authRouter from './Routers/auth.router.js'
 import postRouter from './Routers/post.router.js'
 import commentRouter from './Routers/comment.router.js'
+import path from 'path'
 
 import cookieParser from 'cookie-parser';
 const app = express();
@@ -23,6 +24,8 @@ mongoose.connect(process.env.MONGO)
     console.log(err);
 })
 
+const __dirname= path.resolve();
+
 app.listen(PORT,()=>{
     console.log("Server is running on 3000 port");
 })
@@ -32,7 +35,11 @@ app.use('/api/auth' ,authRouter );
 app.use('/api/post', postRouter);
 app.use('/api/comment', commentRouter);
 
+app.use(express.static(path.join(__dirname,'/client/dist')));
 
+app.get('*', (req, res)=>{
+     res.sendFile(path.join(__dirname, 'client', 'dist','index.html'));
+})
 
 app.use((err, req, res, next)=>{
     const statusCode= err.statusCode||500
